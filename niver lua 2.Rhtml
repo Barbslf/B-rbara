@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página de Parabéns</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="initial-message">
+            <h3>Você está de parabéns! É o visitante número 25, pressione 'sim' para ganhar um prêmio</h3>
+            <img id="initial-gif" src="https://tenor.com/pt-BR/view/happy-cat-gif-26283306" style="max-width: 100%; display: none;">
+        </div>
+        <button id="sim-button" class="btn btn-primary" onclick="showPrize()">Sim</button>
+        <button id="nao-button" class="btn btn-secondary" onclick="showAlternative()">Não</button>
+        <h4 id="alternative-text" style="display: none;">Na verdade, você não tem esta opção, pressione "sim" para continuar</h4>
+        <button id="sim-button-alt" class="btn btn-primary" style="display: none;" onclick="showPrizeAlt()">Sim </button>
+        <canvas id="fireworks-canvas" style="display: none;"></canvas>
+        <img id="grumpy-gif" src="https://media.tenor.com/WXPPqRqcG1kAAAAd/kitten-grumpy.gif" style="max-width: 100%; display: none;">
+        <h3 id="final-message" style="display: none;">Feliz Aniversário! Amamos Você.</h3>
+    </div>
+
+    <script>
+        function hideInitialMessage() {
+            var initialMessage = document.getElementById('initial-message');
+            initialMessage.style.display = 'none';
+        }
+
+        function hideGifs() {
+            var initialGif = document.getElementById('initial-gif');
+            var grumpyGif = document.getElementById('grumpy-gif');
+            initialGif.style.display = 'none';
+            grumpyGif.style.display = 'none';
+        }
+
+        function hideAlternativeText() {
+            var alternativeText = document.getElementById('alternative-text');
+            alternativeText.style.display = 'none';
+        }
+
+        function showPrize() {
+            hideInitialMessage();
+            hideGifs();
+            var simButton = document.getElementById('sim-button');
+            var naoButton = document.getElementById('nao-button');
+
+            simButton.style.display = 'none';
+            naoButton.style.display = 'none';
+
+            var mainDiv = document.querySelector('.container');
+            mainDiv.innerHTML += '<h3>Feliz Aniversário!</h3><img src="image2.jpg" style="max-width: 100%;"><canvas id="fireworks"></canvas>';
+            animateFireworks();
+
+            // Mostrar mensagem final
+            var finalMessage = document.getElementById('final-message');
+            finalMessage.style.display = 'block';
+        }
+
+        function showAlternative() {
+            var simButton = document.getElementById('sim-button');
+            var naoButton = document.getElementById('nao-button');
+            var simButtonAlt = document.getElementById('sim-button-alt');
+            var alternativeText = document.getElementById('alternative-text');
+            var grumpyGif = document.getElementById('grumpy-gif');
+
+            hideInitialMessage();
+            hideGifs();
+            
+            simButton.style.display = 'none';
+            naoButton.style.display = 'none';
+            simButtonAlt.style.display = 'block';
+            alternativeText.style.display = 'block';
+
+            // Adicione o GIF e defina a mensagem
+            var gifHTML = '<img src="https://media.tenor.com/WXPPqRqcG1kAAAAd/kitten-grumpy.gif" style="max-width: 100%;">';
+            alternativeText.innerHTML += gifHTML;
+
+            // Mostrar o confete
+            var initialGif = document.getElementById('initial-gif');
+            initialGif.style.display = 'block';
+        }
+
+        function showPrizeAlt() {
+            hideInitialMessage();
+            hideAlternativeText();
+            hideGifs();
+            var mainDiv = document.querySelector('.container');
+            mainDiv.innerHTML += '<h3>HAPPY HAPPY HAPPY!</h3><img src="image2.jpg" style="max-width: 100%;"><canvas id="fireworks-alt"></canvas>';
+            animateFireworksAlt();
+
+            // Mostrar mensagem final
+            var finalMessage = document.getElementById('final-message');
+            finalMessage.style.display = 'block';
+        }
+
+        function animateFireworks() {
+            var canvas = document.getElementById('fireworks-canvas');
+            canvas.style.display = 'block';
+            var ctx = canvas.getContext('2d');
+            var particles = [];
+
+            function createParticle(x, y) {
+                var particle = {
+                    x: x,
+                    y: y,
+                    radius: 3,
+                    color: 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')',
+                    speed: Math.random() * 3 + 1
+                };
+                return particle;
+            }
+
+            function drawParticle(particle) {
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.fill();
+            }
+
+            function updateParticles() {
+                for (var i = 0; i < particles.length; i++) {
+                    var particle = particles[i];
+                    particle.y -= particle.speed;
+                    if (particle.y < 0) {
+                        particles.splice(i, 1);
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.push(createParticle(Math.random() * canvas.width, canvas.height));
+                for (var i = 0; i < particles.length; i++) {
+                    drawParticle(particles[i]);
+                }
+                updateParticles();
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+
+        function animateFireworksAlt() {
+            var canvas = document.getElementById('fireworks-alt');
+            canvas.style.display = 'block';
+            var ctx = canvas.getContext('2d');
+            var particles = [];
+
+            function createParticle(x, y) {
+                var particle = {
+                    x: x,
+                    y: y,
+                    radius: 3,
+                    color: 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')',
+                    speed: Math.random() * 3 + 1
+                };
+                return particle;
+            }
+
+            function drawParticle(particle) {
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.fill();
+            }
+
+            function updateParticles() {
+                for (var i = 0; i < particles.length; i++) {
+                    var particle = particles[i];
+                    particle.y -= particle.speed;
+                    if (particle.y < 0) {
+                        particles.splice(i, 1);
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.push(createParticle(Math.random() * canvas.width, canvas.height));
+                for (var i = 0; i < particles.length; i++) {
+                    drawParticle(particles[i]);
+                }
+                updateParticles();
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+    </script>
+</body>
+</html>
